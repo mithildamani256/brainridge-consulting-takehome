@@ -1,0 +1,28 @@
+.app-header {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.navbar-brand {
+  color: #17324d;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  color: #fff;
+  background: #315c85;
+}
+
+.nav-link {
+  color: #5e6d7c;
+
+  &.active {
+    color: #17324d;
+    font-weight: 600;
+  }
+}
