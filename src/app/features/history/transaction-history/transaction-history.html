@@ -1,0 +1,150 @@
+<section class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+      <div class="mb-4">
+        <p class="eyebrow mb-2">Account activity</p>
+        <h1 class="display-6 fw-bold mb-2">Transaction history</h1>
+        <p class="text-secondary mb-0">Review incoming and outgoing transfers for any account.</p>
+      </div>
+
+      @if (accountService.accounts().length === 0) {
+        <div class="card history-card border-0 shadow-sm">
+          <div class="card-body p-5 text-center">
+            <div class="empty-state-icon mx-auto mb-3" aria-hidden="true">≡</div>
+            <h2 class="h4">No accounts to review</h2>
+            <p class="text-secondary">Create an account before viewing transaction history.</p>
+            <a class="btn btn-primary" routerLink="/accounts/new"> Create an account </a>
+          </div>
+        </div>
+      } @else {
+        <form [formGroup]="historyForm">
+          <div class="card filter-card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+              <div class="row g-3 align-items-end">
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold" for="historyAccount"> Account </label>
+                  <select
+                    id="historyAccount"
+                    class="form-select form-select-lg"
+                    formControlName="accountId"
+                  >
+                    <option value="">Select an account</option>
+                    @for (account of accountService.accounts(); track account.id) {
+                      <option [value]="account.id">
+                        {{ account.name }} — {{ account.balance | currency }}
+                      </option>
+                    }
+                  </select>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold" for="historySearch">
+                    Filter transactions
+                  </label>
+                  <input
+                    id="historySearch"
+                    class="form-control form-control-lg"
+                    type="search"
+                    formControlName="searchTerm"
+                    placeholder="Search account or direction"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        @if (!selectedAccount) {
+          <div class="card history-card border-0 shadow-sm">
+            <div class="card-body p-5 text-center">
+              <div class="empty-state-icon mx-auto mb-3" aria-hidden="true">↓</div>
+              <h2 class="h4">Choose an account</h2>
+              <p class="text-secondary mb-0">
+                Select an account above to see its transaction history.
+              </p>
+            </div>
+          </div>
+        } @else {
+          <div class="row g-4">
+            <div class="col-12 col-lg-4">
+              <aside class="card account-card border-0 shadow-sm">
+                <div class="card-body p-4">
+                  <p class="small text-secondary text-uppercase mb-2">Selected account</p>
+                  <h2 class="h4 mb-1">{{ selectedAccount.name }}</h2>
+                  <p class="text-secondary text-capitalize mb-4">
+                    {{ selectedAccount.type }}
+                  </p>
+                  <p class="small text-secondary mb-1">Current balance</p>
+                  <p class="display-6 fw-bold mb-0">
+                    {{ selectedAccount.balance | currency }}
+                  </p>
+                </div>
+              </aside>
+            </div>
+
+            <div class="col-12 col-lg-8">
+              <div class="card history-card border-0 shadow-sm">
+                <div class="card-body p-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 mb-0">Transfers</h2>
+                    <span class="badge text-bg-light">
+                      {{ historyEntries.length }}
+                    </span>
+                  </div>
+
+                  @if (historyEntries.length === 0) {
+                    <div class="empty-history text-center py-5">
+                      <div class="empty-state-icon mx-auto mb-3" aria-hidden="true">≡</div>
+                      <p class="fw-semibold mb-1">No transactions found</p>
+                      <p class="small text-secondary mb-0">
+                        @if (historyForm.controls.searchTerm.value) {
+                          Try changing or clearing your filter.
+                        } @else {
+                          Transfers involving this account will appear here.
+                        }
+                      </p>
+                    </div>
+                  } @else {
+                    <div class="transaction-list">
+                      @for (entry of historyEntries; track entry.id) {
+                        <article class="transaction-row">
+                          <div
+                            class="direction-icon"
+                            [class.incoming]="entry.direction === 'incoming'"
+                            [class.outgoing]="entry.direction === 'outgoing'"
+                            aria-hidden="true"
+                          >
+                            {{ entry.direction === 'incoming' ? '↓' : '↑' }}
+                          </div>
+
+                          <div class="transaction-details">
+                            <p class="fw-semibold mb-1">
+                              {{ entry.direction === 'incoming' ? 'From' : 'To' }}
+                              {{ entry.relatedAccountName }}
+                            </p>
+                            <p class="small text-secondary mb-0">
+                              {{ entry.createdAt | date: "MMM d, y 'at' h:mm a" }}
+                            </p>
+                          </div>
+
+                          <strong
+                            class="transaction-amount"
+                            [class.credit]="entry.direction === 'incoming'"
+                            [class.debit]="entry.direction === 'outgoing'"
+                          >
+                            {{ entry.direction === 'incoming' ? '+' : '−' }}
+                            {{ entry.amount | currency }}
+                          </strong>
+                        </article>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</section>
