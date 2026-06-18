@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { AccountService } from '../../../core/services/account-service';
+import { TransfersModule } from '../transfers-module';
 import { FundTransferComponent } from './fund-transfer';
 
 describe('FundTransferComponent', () => {
@@ -14,8 +14,7 @@ describe('FundTransferComponent', () => {
     localStorage.clear();
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterModule.forRoot([])],
-      declarations: [FundTransferComponent],
+      imports: [RouterModule.forRoot([]), TransfersModule],
     }).compileComponents();
 
     accountService = TestBed.inject(AccountService);

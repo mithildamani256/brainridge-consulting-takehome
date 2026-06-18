@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 
 import { AccountService } from '../../../core/services/account-service';
+import { AccountsModule } from '../accounts-module';
 import { AccountCreationComponent } from './account-creation';
 
 describe('AccountCreationComponent', () => {
@@ -9,8 +9,7 @@ describe('AccountCreationComponent', () => {
     localStorage.clear();
 
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [AccountCreationComponent],
+      imports: [AccountsModule],
     }).compileComponents();
   });
 
