@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +8,13 @@ import { Component } from '@angular/core';
 })
 export class App {
   protected readonly appName = 'ClearBank';
+  protected readonly isNavigationOpen = signal(false);
+
+  protected toggleNavigation(): void {
+    this.isNavigationOpen.update((isOpen) => !isOpen);
+  }
+
+  protected closeNavigation(): void {
+    this.isNavigationOpen.set(false);
+  }
 }

@@ -1,14 +1,52 @@
 <header class="app-header border-bottom">
-  <nav class="navbar navbar-expand-lg container py-3">
-    <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" routerLink="/">
+  <nav class="app-nav container py-3" aria-label="Primary navigation">
+    <a
+      class="navbar-brand d-flex align-items-center gap-2 fw-bold"
+      routerLink="/"
+      (click)="closeNavigation()"
+    >
       <span class="brand-mark" aria-hidden="true">$</span>
       {{ appName }}
     </a>
 
-    <div class="navbar-nav ms-auto">
-      <a class="nav-link" routerLink="/accounts/new" routerLinkActive="active"> Create account </a>
-      <a class="nav-link" routerLink="/transfers" routerLinkActive="active"> Transfer funds </a>
-      <a class="nav-link" routerLink="/history" routerLinkActive="active"> Transaction history </a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-label="Toggle navigation"
+      aria-controls="primary-navigation-links"
+      [attr.aria-expanded]="isNavigationOpen()"
+      (click)="toggleNavigation()"
+    >
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <div id="primary-navigation-links" class="navbar-nav" [class.open]="isNavigationOpen()">
+      <a
+        class="nav-link"
+        routerLink="/accounts/new"
+        routerLinkActive="active"
+        (click)="closeNavigation()"
+      >
+        Create account
+      </a>
+      <a
+        class="nav-link"
+        routerLink="/transfers"
+        routerLinkActive="active"
+        (click)="closeNavigation()"
+      >
+        Transfer funds
+      </a>
+      <a
+        class="nav-link"
+        routerLink="/history"
+        routerLinkActive="active"
+        (click)="closeNavigation()"
+      >
+        Transaction history
+      </a>
     </div>
   </nav>
 </header>
