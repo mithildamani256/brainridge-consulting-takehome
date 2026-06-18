@@ -7,19 +7,6 @@ The project was built as a front-end take-home exercise. It uses browser
 `localStorage` instead of a back-end API, so the application can be installed
 and run without any external services.
 
-## Features
-
-- Create multiple Chequing and Savings accounts.
-- Set and validate an initial account balance.
-- Show account-specific styling for creation actions.
-- Transfer funds between two different accounts.
-- Prevent zero, negative, and over-balance transfers.
-- Update both account balances after a successful transfer.
-- Persist accounts and transactions between browser refreshes.
-- View incoming and outgoing transactions for a selected account.
-- Filter transaction history by account name or transfer direction.
-- Navigate between responsive account, transfer, and history pages.
-- Reuse a custom button component through a dedicated `SharedModule`.
 
 ## Application routes
 
@@ -95,46 +82,6 @@ The tests cover:
 - Transaction filtering
 - Reusable button behavior
 - Responsive navigation state
-
-## Production build
-
-Create an optimized build:
-
-```bash
-npm run build
-```
-
-The generated files are written to:
-
-```text
-dist/banking-transactions-app/
-```
-
-## Project structure
-
-```text
-src/app/
-├── core/
-│   ├── models/
-│   │   ├── account.ts
-│   │   └── transaction.ts
-│   └── services/
-│       └── account-service.ts
-├── features/
-│   ├── accounts/
-│   │   └── account-creation/
-│   ├── transfers/
-│   │   └── fund-transfer/
-│   └── history/
-│       └── transaction-history/
-├── shared/
-│   ├── components/
-│   │   └── button/
-│   └── shared-module.ts
-├── app-routing-module.ts
-├── app-module.ts
-└── app.ts
-```
 
 ### Folder responsibilities
 
