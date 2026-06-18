@@ -1,0 +1,84 @@
+.eyebrow {
+  color: #315c85;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.form-card,
+.account-list-card {
+  border-radius: 1.25rem;
+}
+
+.account-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.account-type-option {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 1rem;
+  cursor: pointer;
+  border: 1px solid #dce4eb;
+  border-radius: 0.85rem;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+
+  &.selected {
+    border-color: #315c85;
+    background: #eef5fb;
+  }
+
+  span,
+  small {
+    display: block;
+  }
+
+  small {
+    margin-top: 0.2rem;
+    color: #6c7b89;
+  }
+}
+
+.account-list-card {
+  position: sticky;
+  top: 1.5rem;
+}
+
+.empty-state {
+  color: #5e6d7c;
+  border: 1px dashed #ccd7e1;
+  border-radius: 1rem;
+}
+
+.empty-state-icon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  color: #315c85;
+  font-weight: 700;
+  background: #eaf2f9;
+  border-radius: 50%;
+}
+
+.account-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f7f9fb;
+  border: 1px solid #e3eaf0;
+  border-radius: 0.9rem;
+}
+
+@media (max-width: 575.98px) {
+  .account-type-grid {
+    grid-template-columns: 1fr;
+  }
+}

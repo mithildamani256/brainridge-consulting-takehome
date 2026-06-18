@@ -1,0 +1,162 @@
+<section class="container py-5">
+  <div class="row g-4 align-items-start">
+    <div class="col-12 col-lg-7">
+      <div class="mb-4">
+        <p class="eyebrow mb-2">Account setup</p>
+        <h1 class="display-6 fw-bold mb-2">Create a bank account</h1>
+        <p class="text-secondary mb-0">
+          Add an account now, then use it for transfers and transaction history.
+        </p>
+      </div>
+
+      <div class="card form-card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          @if (successMessage) {
+            <div class="alert alert-success" role="alert">
+              {{ successMessage }}
+            </div>
+          }
+
+          <form [formGroup]="accountForm" (ngSubmit)="createAccount()" novalidate>
+            <div class="mb-4">
+              <label class="form-label fw-semibold" for="accountName"> Account name </label>
+              <input
+                id="accountName"
+                class="form-control form-control-lg"
+                type="text"
+                formControlName="accountName"
+                placeholder="e.g. Everyday spending"
+                maxlength="40"
+                [class.is-invalid]="
+                  accountForm.controls.accountName.touched &&
+                  accountForm.controls.accountName.invalid
+                "
+              />
+
+              @if (
+                accountForm.controls.accountName.touched &&
+                accountForm.controls.accountName.hasError('required')
+              ) {
+                <div class="invalid-feedback">Account name is required.</div>
+              } @else if (
+                accountForm.controls.accountName.touched &&
+                accountForm.controls.accountName.hasError('minlength')
+              ) {
+                <div class="invalid-feedback">Account name must contain at least 3 characters.</div>
+              }
+            </div>
+
+            <fieldset class="mb-4">
+              <legend class="form-label fw-semibold">Account type</legend>
+
+              <div class="account-type-grid">
+                <label
+                  class="account-type-option"
+                  [class.selected]="selectedAccountType === 'chequing'"
+                >
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="accountType"
+                    value="chequing"
+                  />
+                  <span>
+                    <strong>Chequing</strong>
+                    <small>For everyday spending</small>
+                  </span>
+                </label>
+
+                <label
+                  class="account-type-option"
+                  [class.selected]="selectedAccountType === 'savings'"
+                >
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="accountType"
+                    value="savings"
+                  />
+                  <span>
+                    <strong>Savings</strong>
+                    <small>For longer-term goals</small>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold" for="initialBalance"> Initial balance </label>
+
+              <div class="input-group input-group-lg">
+                <span class="input-group-text">$</span>
+                <input
+                  id="initialBalance"
+                  class="form-control"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  formControlName="initialBalance"
+                  [class.is-invalid]="
+                    accountForm.controls.initialBalance.touched &&
+                    accountForm.controls.initialBalance.invalid
+                  "
+                />
+                @if (
+                  accountForm.controls.initialBalance.touched &&
+                  accountForm.controls.initialBalance.hasError('min')
+                ) {
+                  <div class="invalid-feedback">Initial balance cannot be negative.</div>
+                }
+              </div>
+            </div>
+
+            @if (selectedAccountType === 'chequing') {
+              <button class="btn btn-primary btn-lg w-100" type="submit">
+                Create chequing account
+              </button>
+            } @else {
+              <button class="btn btn-success btn-lg w-100" type="submit">
+                Create savings account
+              </button>
+            }
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <aside class="card account-list-card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0">Your accounts</h2>
+            <span class="badge text-bg-light">
+              {{ accountService.accounts().length }}
+            </span>
+          </div>
+
+          @if (accountService.accounts().length === 0) {
+            <div class="empty-state text-center py-5">
+              <div class="empty-state-icon mx-auto mb-3" aria-hidden="true">$</div>
+              <p class="fw-semibold mb-1">No accounts yet</p>
+              <p class="small text-secondary mb-0">Your first account will appear here.</p>
+            </div>
+          } @else {
+            <div class="d-grid gap-3">
+              @for (account of accountService.accounts(); track account.id) {
+                <article class="account-summary">
+                  <div>
+                    <p class="fw-semibold mb-1">{{ account.name }}</p>
+                    <p class="small text-secondary text-capitalize mb-0">
+                      {{ account.type }}
+                    </p>
+                  </div>
+                  <strong>{{ account.balance | currency }}</strong>
+                </article>
+              }
+            </div>
+          }
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
