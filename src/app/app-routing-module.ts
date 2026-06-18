@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AccountCreationComponent } from './features/accounts/account-creation/account-creation';
+import { TransactionHistoryComponent } from './features/history/transaction-history/transaction-history';
 import { FundTransferComponent } from './features/transfers/fund-transfer/fund-transfer';
 
 const routes: Routes = [
@@ -14,6 +15,11 @@ const routes: Routes = [
     path: 'transfers',
     component: FundTransferComponent,
     title: 'Transfer funds | ClearBank',
+  },
+  {
+    path: 'history',
+    component: TransactionHistoryComponent,
+    title: 'Transaction history | ClearBank',
   },
   {
     path: '',
