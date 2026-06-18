@@ -1,0 +1,172 @@
+<section class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-xl-10">
+      <div class="mb-4">
+        <p class="eyebrow mb-2">Move money</p>
+        <h1 class="display-6 fw-bold mb-2">Transfer funds</h1>
+        <p class="text-secondary mb-0">Move money instantly between your ClearBank accounts.</p>
+      </div>
+
+      @if (accountService.accounts().length < 2) {
+        <div class="card border-0 shadow-sm empty-transfer-state">
+          <div class="card-body p-5 text-center">
+            <div class="empty-state-icon mx-auto mb-3" aria-hidden="true">↔</div>
+            <h2 class="h4">Two accounts are required</h2>
+            <p class="text-secondary">Create at least two accounts before making a transfer.</p>
+            <a class="btn btn-primary" routerLink="/accounts/new"> Create another account </a>
+          </div>
+        </div>
+      } @else {
+        <div class="row g-4">
+          <div class="col-12 col-lg-7">
+            <div class="card transfer-card border-0 shadow-sm">
+              <div class="card-body p-4 p-md-5">
+                @if (feedbackMessage) {
+                  <div
+                    class="alert"
+                    [class.alert-success]="feedbackType === 'success'"
+                    [class.alert-danger]="feedbackType === 'danger'"
+                    role="alert"
+                  >
+                    {{ feedbackMessage }}
+                  </div>
+                }
+
+                <form [formGroup]="transferForm" (ngSubmit)="transferFunds()" novalidate>
+                  <div class="mb-4">
+                    <label class="form-label fw-semibold" for="fromAccount"> From account </label>
+                    <select
+                      id="fromAccount"
+                      class="form-select form-select-lg"
+                      formControlName="fromAccountId"
+                      [class.is-invalid]="
+                        transferForm.controls.fromAccountId.touched &&
+                        transferForm.controls.fromAccountId.invalid
+                      "
+                    >
+                      <option value="">Select an account</option>
+                      @for (account of accountService.accounts(); track account.id) {
+                        <option [value]="account.id">
+                          {{ account.name }} — {{ account.balance | currency }}
+                        </option>
+                      }
+                    </select>
+                    @if (
+                      transferForm.controls.fromAccountId.touched &&
+                      transferForm.controls.fromAccountId.hasError('required')
+                    ) {
+                      <div class="invalid-feedback">Choose the account sending the money.</div>
+                    }
+                  </div>
+
+                  <div class="transfer-direction" aria-hidden="true">↓</div>
+
+                  <div class="mb-4">
+                    <label class="form-label fw-semibold" for="toAccount"> To account </label>
+                    <select
+                      id="toAccount"
+                      class="form-select form-select-lg"
+                      formControlName="toAccountId"
+                      [class.is-invalid]="
+                        transferForm.controls.toAccountId.touched &&
+                        (transferForm.controls.toAccountId.invalid ||
+                          transferForm.hasError('sameAccount'))
+                      "
+                    >
+                      <option value="">Select an account</option>
+                      @for (account of accountService.accounts(); track account.id) {
+                        <option [value]="account.id">
+                          {{ account.name }} — {{ account.balance | currency }}
+                        </option>
+                      }
+                    </select>
+                    @if (
+                      transferForm.controls.toAccountId.touched &&
+                      transferForm.controls.toAccountId.hasError('required')
+                    ) {
+                      <div class="invalid-feedback">Choose the account receiving the money.</div>
+                    } @else if (
+                      transferForm.controls.toAccountId.touched &&
+                      transferForm.hasError('sameAccount')
+                    ) {
+                      <div class="invalid-feedback">
+                        Source and destination accounts must be different.
+                      </div>
+                    }
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="d-flex justify-content-between gap-3">
+                      <label class="form-label fw-semibold" for="transferAmount"> Amount </label>
+                      @if (sourceAccount) {
+                        <span class="small text-secondary">
+                          Available:
+                          {{ sourceAccount.balance | currency }}
+                        </span>
+                      }
+                    </div>
+
+                    <div class="input-group input-group-lg">
+                      <span class="input-group-text">$</span>
+                      <input
+                        id="transferAmount"
+                        class="form-control"
+                        type="number"
+                        min="0.01"
+                        step="0.01"
+                        formControlName="amount"
+                        [class.is-invalid]="
+                          transferForm.controls.amount.touched &&
+                          (transferForm.controls.amount.invalid ||
+                            transferForm.hasError('insufficientFunds'))
+                        "
+                      />
+                      @if (
+                        transferForm.controls.amount.touched &&
+                        transferForm.controls.amount.hasError('min')
+                      ) {
+                        <div class="invalid-feedback">
+                          Transfer amount must be greater than zero.
+                        </div>
+                      } @else if (
+                        transferForm.controls.amount.touched &&
+                        transferForm.hasError('insufficientFunds')
+                      ) {
+                        <div class="invalid-feedback">
+                          Amount cannot exceed the available balance.
+                        </div>
+                      }
+                    </div>
+                  </div>
+
+                  <button class="btn btn-primary btn-lg w-100" type="submit">Transfer funds</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-5">
+            <aside class="card balance-card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <h2 class="h5 mb-3">Current balances</h2>
+                <div class="d-grid gap-3">
+                  @for (account of accountService.accounts(); track account.id) {
+                    <article class="account-balance">
+                      <div>
+                        <p class="fw-semibold mb-1">{{ account.name }}</p>
+                        <p class="small text-secondary text-capitalize mb-0">
+                          {{ account.type }}
+                        </p>
+                      </div>
+                      <strong>{{ account.balance | currency }}</strong>
+                    </article>
+                  }
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
