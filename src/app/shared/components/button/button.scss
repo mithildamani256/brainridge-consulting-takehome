@@ -1,0 +1,11 @@
+:host {
+  display: inline-block;
+}
+
+:host:has(.w-100) {
+  display: block;
+}
+
+.btn {
+  font-weight: 600;
+}

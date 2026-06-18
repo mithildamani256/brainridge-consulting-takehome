@@ -1,0 +1,12 @@
+<button
+  class="btn"
+  [class.btn-primary]="styleVariant === 'primary'"
+  [class.btn-secondary]="styleVariant === 'secondary'"
+  [class.btn-success]="styleVariant === 'success'"
+  [class.btn-lg]="size === 'large'"
+  [class.w-100]="fullWidth"
+  [type]="type"
+  [disabled]="disabled"
+>
+  {{ label }}
+</button>
