@@ -103,4 +103,37 @@ describe('AccountService', () => {
     expect(result.error).toBe('same-account');
     expect(service.transactions()).toHaveLength(0);
   });
+
+  it('should return only transactions belonging to an account', () => {
+    const chequing = service.createAccount({
+      accountName: 'Everyday spending',
+      accountType: 'chequing',
+      initialBalance: 500,
+    });
+    const savings = service.createAccount({
+      accountName: 'Emergency fund',
+      accountType: 'savings',
+      initialBalance: 100,
+    });
+    const travel = service.createAccount({
+      accountName: 'Travel fund',
+      accountType: 'savings',
+      initialBalance: 200,
+    });
+
+    service.transferFunds({
+      fromAccountId: chequing.id,
+      toAccountId: savings.id,
+      amount: 25,
+    });
+    service.transferFunds({
+      fromAccountId: travel.id,
+      toAccountId: savings.id,
+      amount: 50,
+    });
+
+    expect(service.getTransactionsForAccount(chequing.id)).toHaveLength(1);
+    expect(service.getTransactionsForAccount(savings.id)).toHaveLength(2);
+    expect(service.getTransactionsForAccount(travel.id)).toHaveLength(1);
+  });
 });

@@ -87,6 +87,17 @@ export class AccountService {
     return { success: true, transaction };
   }
 
+  getAccountById(accountId: string): BankAccount | undefined {
+    return this.accountsState().find((account) => account.id === accountId);
+  }
+
+  getTransactionsForAccount(accountId: string): BankTransaction[] {
+    return this.transactionsState().filter(
+      (transaction) =>
+        transaction.fromAccountId === accountId || transaction.toAccountId === accountId,
+    );
+  }
+
   private loadAccounts(): BankAccount[] {
     return this.loadFromStorage<BankAccount[]>(ACCOUNTS_STORAGE_KEY, []);
   }
